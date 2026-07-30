@@ -1,0 +1,18 @@
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+
+# LaTeX build artefacts. The .log and .fls files embed absolute paths from the
+# machine that built them; none of these belong in a public repository.
+*.aux
+*.log
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.out
+*.bbl
+*.blg
+*.toc

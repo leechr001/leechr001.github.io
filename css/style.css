@@ -1,0 +1,656 @@
+/* ==========================================================================
+   Chris Lee — research site
+   --------------------------------------------------------------------------
+   One stylesheet, no build step, no dependencies.
+
+   Design: Institutional Profile layout, Maple palette, compact scale.
+   Three pages, each sized so that a typical laptop shows the whole page
+   without scrolling. That constraint is why the vertical spacing here is
+   tighter than it would otherwise be — if you add sections, expect to
+   scroll, and prefer moving content to another page instead.
+
+   Contrast: every colour pair below is verified. Run
+       python3 tools/contrast-check.py
+   after changing any colour.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Palette: Maple
+   Sampled from the portrait rather than chosen alongside it. Measured hue
+   content of the photograph: blue 33%, clay/maroon 32%, neutral 12%, skin 10%,
+   gold 6%, GREEN 0.5%. The previous sage palette was accented in the one hue
+   the photo does not contain, which is why the portrait looked pasted on.
+   These values come from the maple foliage (#54483b), its backlit gold
+   (#85773f), and its deepest shadow (#323135).
+   -------------------------------------------------------------------------- */
+
+:root {
+  /* --- Surfaces --- */
+  --paper:        #f8f5f2;  /* warm blush-neutral, the pale side of a leaf */
+  --paper-sunk:   #efeae5;  /* sidebar wells, callouts, portrait mat */
+  --rule:         #e3dbd3;  /* decorative hairlines */
+  --rule-strong:  #cdc2b8;  /* decorative rules that read as deliberate */
+  --rule-control: #8b8177;  /* borders that identify something CLICKABLE.
+                               Must stay >= 3:1 on BOTH --paper and
+                               --paper-sunk (WCAG 1.4.11). Do not lighten. */
+
+  /* --- Text --- */
+  --ink:          #241f1c;  /* primary text          15.0:1 on --paper */
+  --ink-muted:    #60564e;  /* metadata              6.6:1 on --paper */
+
+  /* --- Accent: maple maroon --- */
+  --accent:       #78352e;  /* links, rules          8.2:1 on --paper */
+  --accent-deep:  #5a271f;  /* hover / pressed */
+  --accent-wash:  #f2e7e2;  /* faint accent background */
+
+  /* Deep leaf-shadow tone. Structural, never text: it draws the serrated
+     masthead edge. It is also the page's only other dark mass, so the
+     portrait is no longer the sole dark object on a light page. */
+  --anchor:       #43302b;
+
+  /* Backlit gold from the canopy. Defined, deliberately unused — it passes at
+     4.9:1 if you ever want a second accent, but two accents on a page this
+     quiet is usually one too many. */
+  --gold:         #7a6a2c;
+
+  /* --- Focus --- */
+  --focus:        #2d5f86;  /* deliberately NOT maple. A focus ring must never
+                               be mistakable for an ordinary accent. It also
+                               echoes the (now muted) shirt. */
+
+  /* --- Type --- */
+  --font-display: Georgia, "Iowan Old Style", "Palatino Linotype", Palatino,
+                  "Times New Roman", serif;
+  --font-body:    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                  "Helvetica Neue", Arial, sans-serif;
+
+  /* Compact scale. 15px body. 12px is the floor for any text on this site —
+     below that, uppercase letterspaced labels become genuinely hard work. */
+  --size-base:    0.9375rem;  /* 15px */
+  --size-meta:    0.8125rem;  /* 13px — authors, venues, sidebar values */
+  --size-label:   0.75rem;    /* 12px — uppercase section labels, tags */
+  --leading:      1.55;
+
+  /* --- Spacing scale (do not invent values outside it) --- */
+  --s-1:  0.25rem;
+  --s-2:  0.5rem;
+  --s-3:  0.75rem;
+  --s-4:  1rem;
+  --s-5:  1.25rem;
+  --s-6:  1.75rem;
+  --s-7:  2.5rem;
+  --s-8:  3.5rem;
+
+  --measure:      38rem;      /* readable line length at 15px */
+  --shell:        64rem;
+
+  /* The site is light only. Declaring it stops browsers from applying their
+     own automatic dark treatment (Chrome on Android does this) and keeps
+     scrollbars and any native controls in light styling to match. */
+  color-scheme: light;
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--size-base);
+  line-height: var(--leading);
+  -webkit-font-smoothing: antialiased;
+}
+
+img { display: block; max-width: 100%; }
+
+.shell {
+  width: min(100%, var(--shell));
+  margin: 0 auto;
+  padding: 0 clamp(var(--s-4), 3vw, var(--s-7));
+}
+
+p { max-width: var(--measure); }
+
+/* --- Links ---------------------------------------------------------------
+   Underlined in their own colour. The underline is the non-colour cue that
+   something is a link (WCAG 1.4.1) — a pale tint half-defeats the point.   */
+
+a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.15em;
+  text-decoration-color: currentColor;
+  transition: text-decoration-thickness 120ms ease, color 120ms ease;
+}
+
+a:hover { color: var(--accent-deep); text-decoration-thickness: 2px; }
+
+/* Applies to everything focusable, so anything added later inherits it. */
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* --- Headings ------------------------------------------------------------ */
+
+h1, h2, h3 { margin: 0; color: var(--ink); text-wrap: balance; }
+
+h1 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.75rem;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+/* Section headings are small uppercase labels on a rule. They recede so the
+   writing leads. */
+h2.label {
+  font-size: var(--size-label);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  padding-bottom: var(--s-2);
+  margin-bottom: var(--s-4);
+  border-bottom: 1px solid var(--rule-strong);
+}
+
+h3 {
+  font-family: var(--font-body);
+  font-size: var(--size-base);
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+/* ==========================================================================
+   Utilities
+   ========================================================================== */
+
+.muted { color: var(--ink-muted); }
+.meta  { font-size: var(--size-meta); color: var(--ink-muted); }
+
+/* Standard gap after a block. Use this rather than writing inline margins, so
+   the vertical rhythm stays consistent across pages. */
+.stack-top { margin-top: var(--s-4); }
+
+/* Hidden visually, still read aloud. Used to give repeated links ("PDF",
+   "arXiv") a unique destination when a screen reader user pulls up a list of
+   every link on the page. Never use display:none for this. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 10;
+  background: var(--paper);
+  color: var(--ink);
+  padding: var(--s-3) var(--s-4);
+  border: 1px solid var(--rule-control);
+}
+
+.skip-link:focus { left: var(--s-4); top: var(--s-4); }
+
+/* ==========================================================================
+   Masthead
+   ========================================================================== */
+
+.masthead {
+  border-bottom: 1px solid var(--rule-strong);
+}
+
+/* The one non-rectilinear thing on the site: a shallow serrated edge across
+   the top of every page, echoing the toothed margin of a maple leaf. Five
+   pixels tall, drawn in the deepest leaf tone, appearing once per page. It is
+   texture, not illustration — the moment it becomes recognisable as a leaf it
+   has gone too far.
+
+   Drawn as a mask over a solid colour rather than a coloured SVG, so it keeps
+   following --anchor instead of hard-coding a hex. Browsers without mask
+   support fall back to a plain 5px bar, which is what the site had before. */
+.masthead::before {
+  content: "";
+  display: block;
+  height: 5px;
+  background-color: var(--anchor);
+  --tooth: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='5' viewBox='0 0 16 5'%3E%3Cpath d='M0 0h16v2L8 5 0 2z' fill='%23000'/%3E%3C/svg%3E");
+  -webkit-mask-image: var(--tooth);
+          mask-image: var(--tooth);
+  -webkit-mask-repeat: repeat-x;
+          mask-repeat: repeat-x;
+  -webkit-mask-size: 16px 5px;
+          mask-size: 16px 5px;
+}
+
+.masthead__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s-2) var(--s-5);
+  padding-top: var(--s-3);
+  padding-bottom: var(--s-3);
+}
+
+.masthead__dept {
+  font-size: var(--size-label);
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.masthead__dept:hover { color: var(--ink); text-decoration: underline; }
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-5);
+  font-size: var(--size-meta);
+}
+
+.nav a {
+  color: var(--ink-muted);
+  text-decoration: none;
+  padding: var(--s-1) 0;
+  border-bottom: 2px solid transparent;
+}
+
+.nav a:hover { color: var(--ink); border-bottom-color: var(--rule-control); }
+
+/* Current page is marked with the accent rule AND aria-current, so the state
+   is never carried by colour alone. */
+.nav a[aria-current="page"] {
+  color: var(--ink);
+  border-bottom-color: var(--accent);
+}
+
+/* ==========================================================================
+   Profile block (home page)
+   ========================================================================== */
+
+/* The columns and gap here deliberately MATCH .layout below, so the portrait
+   occupies exactly the same column as the sidebar. Its left edge lines up with
+   the sidebar's vertical rule, which then reads as a continuation of the photo
+   edge rather than an unrelated line. If you change .layout's columns, change
+   these to match or the alignment breaks. */
+.profile {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(13rem, 0.65fr);
+  gap: var(--s-8);
+  /* NOT centre. The portrait is roughly 300px tall and the name block beside
+     it is roughly 114px, so centring pushed the name down by ~93px while the
+     photo still began 20px below the masthead. The two columns started at
+     visibly different heights, which is what read as unnatural. Aligning to
+     the start makes them begin on the same line. */
+  align-items: start;
+  padding: var(--s-6) 0 var(--s-5);
+}
+
+/* Inner pages carry no photo, so the title uses the full width rather than
+   leaving an empty gutter. They also need MORE breathing room than the home
+   page, not less: on the home page the portrait creates a visual break between
+   the masthead and the content, and with no photo the page title would
+   otherwise sit 20px under the nav and 16px above the first section label,
+   sandwiched between two rules with almost no air. */
+.profile--plain {
+  grid-template-columns: 1fr;
+  padding: var(--s-7) 0 var(--s-6);
+}
+
+.profile__name {
+  font-size: clamp(2.25rem, 5vw, 3rem);
+  margin-bottom: var(--s-2);
+}
+
+.profile__role {
+  margin: 0;
+  font-size: 1.0625rem;
+  color: var(--ink);
+}
+
+.profile__affil {
+  margin: var(--s-1) 0 0;
+  font-size: var(--size-meta);
+  color: var(--ink-muted);
+}
+
+/* The lede sits in the profile block, beside the portrait, rather than in the
+   column below: it puts the one sentence that must be read at the very top of
+   the page, and gives the left column enough height to stand beside a tall
+   photo. The gap is --s-6 so it separates from the name/role/affiliation block
+   above rather than reading as a fourth line of it. */
+.profile .lede {
+  margin-top: var(--s-6);
+}
+
+/* Squared, not circular: reads as a portrait rather than an avatar, and the
+   squared corners let its edges line up with the columns and rules around it.
+   Sized to the sidebar column — small photos in a wide layout read as
+   accidents; one that matches an existing column reads as a decision. */
+.profile__photo {
+  /* Fills its grid column, so the portrait is exactly as wide as the sidebar
+     beneath it. aspect-ratio rather than a fixed height means it stays in
+     proportion as the column flexes with the viewport. */
+  width: 100%;
+  height: auto;
+  aspect-ratio: 393 / 480;   /* the source crop's own proportions */
+  object-fit: cover;
+  object-position: 50% 35%;   /* favours the face over the shirt */
+
+  /* A mat, not a hairline. The photo edge now lands on the sidebar tone before
+     it reaches bare paper, which is what stops it reading as abrupt.
+     No CSS filter any more: the colour correction is baked into
+     headshot-maple.jpeg, so a saved copy or a link preview looks like the
+     page does. Stacking saturate() on top would double-mute it. */
+  border: 8px solid var(--paper-sunk);
+  outline: 1px solid var(--rule);
+}
+
+/* ==========================================================================
+   Two-column body — main column plus factual sidebar
+   ========================================================================== */
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(13rem, 0.65fr);
+  gap: var(--s-8);
+  padding-bottom: var(--s-7);
+}
+
+.layout__main > * + * { margin-top: var(--s-6); }
+
+.lede {
+  max-width: var(--measure);
+  margin: 0;
+  /* 21px, deliberately a clear step above .profile__role at 17px. At the old
+     19px the two were only 2px apart — near enough to look like a mistake
+     rather than a decision, which is the usual reason a block like this
+     "looks off" without an obvious cause. */
+  font-size: 1.3125rem;
+  line-height: 1.4;
+  /* Evens out the line lengths. Without it a short final line can dangle
+     under two full ones, which reads as sloppy at display size. */
+  text-wrap: balance;
+}
+
+.layout__main p { margin: 0 0 var(--s-3); }
+.layout__main p:last-child { margin-bottom: 0; }
+
+.aside {
+  border-left: 1px solid var(--rule);
+  padding-left: var(--s-6);
+}
+
+.aside > * + * { margin-top: var(--s-6); }
+
+.aside h2 {
+  font-size: var(--size-label);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  margin-bottom: var(--s-3);
+}
+
+.aside ul { margin: 0; padding: 0; list-style: none; }
+.aside li + li { margin-top: var(--s-2); }
+
+.aside p,
+.aside li {
+  max-width: none;
+  font-size: var(--size-meta);
+  /* Long emails and URLs wrap rather than forcing the page sideways
+     (WCAG 1.4.10 Reflow). */
+  overflow-wrap: anywhere;
+}
+
+/* ==========================================================================
+   Publications
+   ========================================================================== */
+
+.pubs { margin: 0; padding: 0; list-style: none; max-width: none; }
+
+/* Year in a left gutter, links in a right gutter, record in the middle. The
+   densest form that is still comfortable to scan. */
+.pub {
+  display: grid;
+  grid-template-columns: 3.5rem minmax(0, 1fr) auto;
+  gap: var(--s-2) var(--s-5);
+  align-items: baseline;
+  padding: var(--s-4) 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.pub:first-child { border-top: 1px solid var(--rule); }
+
+.pub__year {
+  font-size: var(--size-meta);
+  color: var(--ink-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.pub__title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.35;
+  margin: 0 0 var(--s-1);
+}
+
+.pub__meta {
+  max-width: none;
+  margin: 0;
+  font-size: var(--size-meta);
+  color: var(--ink-muted);
+}
+
+/* Your own name in an author list: bold, not coloured — colour would read as
+   a link. */
+.pub__meta .self { color: var(--ink); font-weight: 600; }
+
+/* Author-order marker. A bare dagger is announced as "dagger" by a screen
+   reader, which means nothing, so the symbol is hidden from assistive
+   technology and the meaning is carried by adjacent visually-hidden text.
+   Deliberately NOT an asterisk: in ML venues "*" means equal contribution,
+   and a reader trained on that would misread this as a co-first-author claim. */
+.alpha {
+  font-size: 0.75em;
+  vertical-align: super;
+  line-height: 0;
+  color: var(--ink-muted);
+}
+
+.pub-legend {
+  max-width: none;
+  margin: var(--s-3) 0 0;
+  font-size: var(--size-label);
+  color: var(--ink-muted);
+}
+
+.pub__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  margin: 0;
+  max-width: none;
+}
+
+/* At least 24x24 CSS px — the WCAG 2.2 minimum pointer target (2.5.8).
+   Do not tighten this padding to make the tags look daintier. */
+.pub__links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: var(--s-1) var(--s-3);
+  border: 1px solid var(--rule-control);
+  border-radius: 2px;
+  font-size: var(--size-label);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.pub__links a:hover {
+  background: var(--accent-wash);
+  border-color: var(--accent);
+  color: var(--accent-deep);
+}
+
+/* ==========================================================================
+   Research themes
+   ========================================================================== */
+
+.themes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: var(--s-6) var(--s-7);
+}
+
+.theme p {
+  max-width: none;
+  margin: var(--s-2) 0 0;
+  font-size: var(--size-meta);
+  color: var(--ink-muted);
+}
+
+/* ==========================================================================
+   Callout — the CV link
+   ========================================================================== */
+
+.callout {
+  background: var(--paper-sunk);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  padding: var(--s-3) var(--s-4);
+}
+
+.callout p { margin: 0; max-width: none; font-size: var(--size-meta); }
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+
+.footer {
+  border-top: 1px solid var(--rule-strong);
+  padding: var(--s-4) 0 var(--s-6);
+  font-size: var(--size-label);
+  color: var(--ink-muted);
+}
+
+.footer p { margin: 0; max-width: none; }
+
+/* ==========================================================================
+   Responsive
+   --------------------------------------------------------------------------
+   The sidebar drops below the main column before it gets too narrow to read.
+   Everything stays in one column on a phone.
+   ========================================================================== */
+
+@media (max-width: 52rem) {
+  /* .profile collapses at the same breakpoint as .layout so the two never
+     disagree about how many columns the page has. */
+  .layout,
+  .profile { grid-template-columns: 1fr; gap: var(--s-6); }
+
+  /* Once it is no longer sharing a column with the sidebar, the portrait must
+     be capped — width:100% in a single-column layout would be enormous. */
+  .profile__photo { width: 11rem; }
+
+  .aside {
+    border-left: 0;
+    border-top: 1px solid var(--rule);
+    padding-left: 0;
+    padding-top: var(--s-5);
+  }
+
+  .themes { gap: var(--s-5); }
+}
+
+@media (max-width: 34rem) {
+  .profile { gap: var(--s-4); }
+
+  .profile__photo { width: 8.5rem; }
+
+  .pub {
+    grid-template-columns: 3rem minmax(0, 1fr);
+  }
+
+  .pub__links { grid-column: 2; }
+
+  .masthead__row { align-items: flex-start; flex-direction: column; }
+}
+
+/* ==========================================================================
+   Motion
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ==========================================================================
+   Windows High Contrast Mode / forced colours
+   --------------------------------------------------------------------------
+   Our palette is discarded when a reader forces their own. Borders survive
+   (which is why every boundary here is a real `border`, never a box-shadow),
+   but the focus ring must be restated in a system colour.
+   ========================================================================== */
+
+@media (forced-colors: active) {
+  :focus-visible { outline: 3px solid Highlight; outline-offset: 2px; }
+  /* Masked backgrounds do not survive forced colours; fall back to a plain
+     rule so the page still has a defined top edge. */
+  .masthead::before {
+    -webkit-mask-image: none;
+            mask-image: none;
+    background-color: CanvasText;
+    height: 3px;
+  }
+  .nav a[aria-current="page"] { border-bottom-color: Highlight; }
+  .pub__links a { border-color: ButtonBorder; }
+}
+
+/* ==========================================================================
+   Print
+   ========================================================================== */
+
+@media print {
+  :root {
+    --paper: #fff; --paper-sunk: #fff; --ink: #000; --ink-muted: #444;
+    --accent: #000; --rule: #ccc; --rule-strong: #999;
+  }
+  body { font-size: 10.5pt; }
+  .masthead, .footer, .skip-link, .nav { display: none; }
+  .layout { grid-template-columns: 1fr; }
+  .aside { border-left: 0; padding-left: 0; }
+  a { text-decoration: none; }
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 8pt; color: #555; word-break: break-all;
+  }
+  .pub { page-break-inside: avoid; }
+}
