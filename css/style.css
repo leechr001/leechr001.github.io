@@ -336,14 +336,22 @@ h3 {
   color: var(--ink-muted);
 }
 
-/* The lede sits in the profile block, beside the portrait, rather than in the
-   column below: it puts the one sentence that must be read at the very top of
-   the page, and gives the left column enough height to stand beside a tall
-   photo. The gap is --s-6 so it separates from the name/role/affiliation block
-   above rather than reading as a fourth line of it. */
-.profile .lede {
+/* The research summary sits in the profile block, beside the portrait, rather
+   than at the top of the column below: it puts the work itself at the very top
+   of the page, and gives the left column enough height to stand beside a tall
+   photo. The gap is --s-6 so the label rule separates from the
+   name/role/affiliation block above rather than crowding it.
+
+   The paragraph rhythm is restated here because this block sits outside
+   .layout__main, which is where the home page's body paragraphs normally get
+   their margins. */
+.profile__summary {
   margin-top: var(--s-6);
+  max-width: var(--measure);
 }
+
+.profile__summary p { margin: 0 0 var(--s-3); }
+.profile__summary p:last-child { margin-bottom: 0; }
 
 /* Squared, not circular: reads as a portrait rather than an avatar, and the
    squared corners let its edges line up with the columns and rules around it.
