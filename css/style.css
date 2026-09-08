@@ -355,14 +355,15 @@ h3 {
      proportion as the column flexes with the viewport. */
   width: 100%;
   height: auto;
-  aspect-ratio: 393 / 480;   /* the source crop's own proportions */
+  aspect-ratio: 393 / 480;   /* the source crop's own proportions — the file is
+                                786x960, a 2x asset with the identical ratio */
   object-fit: cover;
   object-position: 50% 35%;   /* favours the face over the shirt */
 
   /* A mat, not a hairline. The photo edge now lands on the sidebar tone before
      it reaches bare paper, which is what stops it reading as abrupt.
      No CSS filter any more: the colour correction is baked into
-     headshot-maple.jpeg, so a saved copy or a link preview looks like the
+     headshot-2026-web.jpg, so a saved copy or a link preview looks like the
      page does. Stacking saturate() on top would double-mute it. */
   border: 8px solid var(--paper-sunk);
   outline: 1px solid var(--rule);

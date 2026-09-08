@@ -13,8 +13,10 @@ index.html            the site
 research.html         written, not yet linked — see "Turning the other pages on"
 publications.html     written, not yet linked
 css/style.css         all styling; design tokens at the top
-assets/headshot.jpeg  the original photograph, kept as the source for re-crops
-assets/headshot-maple.jpeg  the cropped, colour-corrected portrait the site uses
+assets/headshot-2026.jpg      the current original, 3200x4800, source for re-crops
+assets/headshot-2026-web.jpg  the cropped, colour-corrected portrait the site uses
+assets/headshot.jpeg          the previous original (maple portrait)
+assets/headshot-maple.jpeg    the previous site portrait, superseded
 assets/cv.pdf         the CV the site links to
 cv/Chris_Lee_CV.tex   CV source (compile with LuaLaTeX)
 tools/contrast-check.py     verifies every palette against WCAG AA
@@ -27,18 +29,40 @@ across the top, a department line, then a two-column body: writing on the left, 
 factual sidebar on the right. Publications are an indexed record with the year in
 a left gutter.
 
-**The palette is sampled from the portrait rather than chosen alongside it.**
-Measuring the photograph's hue content gave blue 33%, clay/maroon 32%, neutral
-12%, skin 10%, gold 6%, and green 0.5%. An earlier draft was accented in sage —
-the one hue the photo essentially does not contain — which is why the portrait
-read as pasted on. The values now come from the maple foliage behind me
+**The palette was sampled from the portrait rather than chosen alongside it.**
+Measuring the original maple photograph's hue content gave blue 33%, clay/maroon
+32%, neutral 12%, skin 10%, gold 6%, and green 0.5%. An earlier draft was
+accented in sage — the one hue that photo essentially did not contain — which is
+why the portrait read as pasted on. The values come from the maple foliage
 (`#54483b`), its backlit gold (`#85773f`) and its deepest shadow (`#323135`).
 
-The photograph is corrected to match: blue muted to 38% saturation, skin eased to
-78% on bright pixels only, leaving the maple's maroon and gold to carry the
-image. The correction is baked into `headshot-maple.jpeg` rather than applied as
-a CSS filter, so a saved copy or a link preview looks like the page does. Do not
-stack a `filter:` on top of it.
+**The 2026 portrait was fitted to that palette, not the other way round.** The
+tokens did not move. They did not need to: measured the same way, the new
+photograph sits inside the palette's own hue band almost everywhere. Its brick
+column reads `#553723` at hue 24 against `--anchor`'s hue 12.5; the background
+wash reads `#e9d3c4` at hue 24 against `--paper-sunk`'s hue 30; and the shirt's
+apparent sage is really an olive at hue 52.5, landing on `--gold`'s hue 47.7
+rather than on the true green the palette has no answer for. Only the powder-blue
+floral is genuinely out of key, and it is under 4% of the frame.
+
+So the correction is the same recipe as before, applied to a photograph that
+needed less of it: blue muted to 38% saturation, skin eased to an absolute 80%
+(not stacked on the global trim, or easing the brick drags the face grey with
+it), and the warm tones trimmed to 84% so the brick sits at roughly `--anchor`'s
+weight instead of reading as vivid terracotta. That lands mean saturation at
+0.26, against 0.22 for the portrait it replaces, and the cheek at 0.37 inside the
+old portrait's 0.32–0.40. The olive and the brick are left to carry the image.
+
+The correction is baked into `headshot-2026-web.jpg` rather than applied as a CSS
+filter, so a saved copy or a link preview looks like the page does. Do not stack
+a `filter:` on top of it.
+
+**One thing the swap did change: the portrait is no longer a dark mass.** The
+maple photograph was the page's other dark object, which is part of why
+`--anchor` draws the masthead's serrated edge. The 2026 photograph is bright and
+airy, and its dark weight is now the shirt in the lower half rather than the
+whole frame. Nothing is broken by this, but if the top of the page ever starts
+to feel top-heavy, that is the reason.
 
 **Compact type scale**: 15px body, 13px metadata, 12px labels. Twelve pixels is
 the floor — below that, letterspaced uppercase labels stop being comfortable to
