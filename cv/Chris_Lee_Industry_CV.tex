@@ -1,0 +1,339 @@
+% !TeX program = lualatex
+% Build with LuaLaTeX twice (TeX Live 2025 or newer), or use latexmk.
+%
+% ATS / machine-readability notes:
+% - Single-column layout; no tables, multicolumns, or text boxes for content.
+% - Every link is also printed as plain text, so parsers that ignore
+%   hyperlinks still capture it.
+% - Standard section headings (Education, Experience, Publications, Skills).
+% - Dates use MM/YYYY where the month is known.
+% - Tagged PDF/UA output with a real text layer (OpenType font, Unicode).
+\DocumentMetadata{
+  lang=en-US,
+  pdfversion=2.0,
+  testphase={phase-III,title,table},
+  pdfstandard=ua-2
+}
+\documentclass[10pt,letterpaper]{article}
+
+\usepackage[
+  top=0.6in,
+  bottom=0.6in,
+  left=0.7in,
+  right=0.7in
+]{geometry}
+\usepackage{libertinus}
+\usepackage{microtype}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{xcolor}
+
+\definecolor{ink}{HTML}{202428}
+\definecolor{muted}{HTML}{5A6168}
+\definecolor{rule}{HTML}{B8BEC4}
+\definecolor{link}{HTML}{294E6B}
+
+\usepackage[
+  colorlinks=true,
+  urlcolor=link,
+  linkcolor=link,
+  pdfauthor={Chris Lee},
+  pdftitle={Chris Lee - Curriculum Vitae},
+  pdfsubject={Curriculum vitae: Ph.D. candidate in Operations Research},
+  pdfkeywords={Chris Lee, operations research, online learning, bandit
+    algorithms, sequential decision-making, optimization, Bayesian modeling,
+    machine learning, data science, data engineering, Python, SQL, BigQuery,
+    Airflow, Google Cloud Platform, applied science, research science,
+    internship}
+]{hyperref}
+
+\color{ink}
+\pagestyle{plain}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+\setlength{\emergencystretch}{2em}
+\urlstyle{same}
+
+\titleformat{\section}
+  {\large\bfseries\color{ink}}
+  {}
+  {0pt}
+  {}
+  [\vspace{0.15em}{\color{rule}\titlerule}]
+\titlespacing*{\section}{0pt}{0.75em}{0.4em}
+
+\setlist[itemize]{
+  leftmargin=1.25em,
+  itemsep=0pt,
+  topsep=0.05em,
+  parsep=0pt,
+  partopsep=0pt
+}
+\setlist[enumerate]{
+  leftmargin=1.55em,
+  labelsep=0.45em,
+  itemsep=0.15em,
+  topsep=0.1em,
+  parsep=0pt,
+  partopsep=0pt
+}
+
+% One entry = plain lines of text (no tables), so parsers read them in order.
+% #1 organization or title, #2 dates, #3 role / degree, #4 location
+\newcommand{\entry}[4]{%
+  \textbf{#1}\hfill\textbf{#2}\par
+  \emph{#3}\hfill #4\par
+}
+
+\newcommand{\paperstatus}[1]{{\color{muted}\emph{#1}}}
+
+\begin{document}
+
+% ---------- Header (plain text, no table) ----------
+{\Huge\bfseries Chris Lee}\par
+\vspace{0.3em}
+{\large Ph.D. Candidate in Operations Research, University of Michigan}\par
+\vspace{0.3em}
+Ann Arbor, MI \enspace|\enspace (206) 850-9429 \enspace|\enspace
+\href{mailto:chrisor@umich.edu}{chrisor@umich.edu}\par
+Website: \url{https://leechr001.github.io}
+\enspace|\enspace
+GitHub: \url{https://github.com/leechr001}\par
+Google Scholar:
+\url{https://scholar.google.com/citations?user=eetYVLoAAAAJ}\par
+\vspace{0.2em}
+\textbf{Expected graduation:} 05/2029
+\enspace|\enspace
+\textbf{Available:} Summer 2027 (05/2027 -- 08/2027)\par
+
+\section*{Research Interests}
+
+Online learning and sequential decision-making under structured feedback;
+bandit algorithms; Bayesian models of sequential decisions; applications in
+workforce management, energy, and healthcare.
+
+\section*{Education}
+
+\entry
+  {University of Michigan}
+  {09/2024 -- 05/2028 (expected)}
+  {Ph.D. in Operations Research, Department of Industrial and Operations Engineering}
+  {Ann Arbor, MI}
+Advisors: Xiuli Chao and Izak Duenyas. Research area: online learning and
+stochastic bandits.\par
+
+\vspace{0.45em}
+\entry
+  {University of Washington}
+  {2018 -- 2022}
+  {B.S. in Mathematics with Honors}
+  {Seattle, WA}
+GPA: 3.7. Distinctions: Departmental Honors; Dean's List (2018--2022).\par
+Honors thesis: \emph{Computing Mixing Times of Parallel Tempered Markov
+Chains}. Advisors: Soumik Pal and Rekha Thomas.\par
+
+\section*{Industry Experience}
+
+\entry
+  {AmFam Group (American Family Insurance)}
+  {08/2022 -- 08/2024}
+  {Cloud Data Engineer}
+  {Madison, WI (remote)}
+\begin{itemize}
+  \item Lead architect and developer, on a five-person team, of a 12-month
+    initiative to automate key parts of the actuarial ratemaking process over
+    terabyte-scale data (Google Cloud Storage, Cloud Functions, BigQuery,
+    Cloud Composer, Airflow, Google Workspace).
+  \item Built a business-intelligence semantic layer in BigQuery in
+    collaboration with data governance engineers, data scientists, data
+    analysts, and project managers (Cloud Composer, Airflow, Python, SQL).
+  \item Developed an internal tool for evaluating data quality of
+    terabyte-scale tables.
+  \item Received the 2023 ``Boomtown Developer'' award from the AmFam IT
+    organization for outstanding achievement and passion for learning.
+  \item Rated ``exceeds expectations'' after three months and
+    ``outstanding'' after one year in performance reviews.
+\end{itemize}
+
+\vspace{0.3em}
+\entry
+  {American Family Insurance}
+  {06/2021 -- 08/2021}
+  {Data Analytics Intern}
+  {Madison, WI (remote)}
+\begin{itemize}
+  \item Produced monthly KPI reports and ad hoc analyses for the performance
+    management department of AmFam Personal Auto lines: pulled data from GCP
+    with SQL, analyzed in Excel and R, and presented findings in PowerPoint.
+  \item Trained a regression model to estimate key partners' mix of business
+    (R).
+  \item Researched and pitched a nonprofit to AmFam's Philanthropy team,
+    resulting in a \$500 grant.
+  \item Rated as ``exceeded expectations'' and a ``fast learner'' in
+    performance review.
+\end{itemize}
+
+\vspace{0.3em}
+\entry
+  {Market Games}
+  {09/2020 -- 12/2020}
+  {Marketing Analytics and Data Science Intern}
+  {Berkeley, CA}
+\begin{itemize}
+  \item Independently built and managed a social media marketing data
+    pipeline: batch ingestion of relational and non-relational sources,
+    including a web scraper for competitive analysis (Python), joined with
+    Google Analytics data.
+  \item Delivered weekly reports with actionable insights for a non-technical
+    team, using clustering for customer segmentation, sentiment analysis of
+    customer interactions, and regression models to optimize marketing
+    variables (R).
+  \item Increased Instagram followers by 30\% and likes per post by about
+    90\%.
+\end{itemize}
+
+\section*{Research Experience}
+
+\entry
+  {Washington Experimental Mathematics Lab, University of Washington}
+  {09/2021 -- 12/2021; 03/2022 -- 06/2022}
+  {Undergraduate Researcher, Department of Mathematics}
+  {Seattle, WA}
+\begin{itemize}
+  \item Conducted research on graph boundary structure, Markov-chain mixing,
+    graphical designs, and spectral graph theory through an honors thesis,
+    the Washington Experimental Mathematics Lab, and the Washington Directed
+    Reading Program.
+  \item Co-authored a paper published in the \emph{Journal of Combinatorics};
+    research acknowledged in a paper on graphical designs and Gale duality.
+  \item Faculty mentors: Stefan Steinerberger, Rekha Thomas, and Soumik Pal;
+    graduate mentors: Kevin Liu and Catherine Babecki.
+\end{itemize}
+
+\vspace{0.3em}
+\entry
+  {CocoBot, UW School of Public Health}
+  {06/2019 -- 12/2019}
+  {Research Assistant}
+  {Seattle, WA}
+\begin{itemize}
+  \item Prototyped a conversational healthcare AI with Rasa NLU as part of a
+    funded research project (Python).
+  \item Scraped websites for medical diagnostic criteria and treatments and
+    ingested them into Elasticsearch.
+\end{itemize}
+
+\section*{Publications and Working Papers}
+
+{\small\bfseries Working Papers}
+\begin{enumerate}
+  \item \textbf{Chris Lee}, Xiuli Chao, and Izak Duenyas.
+    ``Sequential Hiring of Contingent Workers Through Learning-Based
+    Optimization.'' \paperstatus{Submitted to Operations Research}, 2026.
+
+  \item \textbf{Chris Lee}, Xiuli Chao, and Izak Duenyas.
+    ``The Price of Shared Shocks: From Coverage to Transport in Combinatorial
+    Semi-Bandits.'' \paperstatus{Working paper}, 2026.
+\end{enumerate}
+
+\vspace{0.12em}
+{\small\bfseries Refereed Publication}
+\begin{enumerate}
+  \item Nick Chiem, William Dudarov, \textbf{Chris Lee}, Sean Lee, and Kevin Liu.
+    ``A Characterization of Graphs with at Most Four Boundary Vertices.''
+    \emph{Journal of Combinatorics}, 15(3), 2024.
+    arXiv: \href{https://arxiv.org/abs/2209.04438}{2209.04438}.
+    \paperstatus{Authors listed alphabetically.}
+\end{enumerate}
+
+\vspace{0.12em}
+{\small\bfseries Acknowledged In}
+\begin{itemize}
+  \item ``Graphical Designs and Gale Duality.''
+    arXiv: \href{https://arxiv.org/abs/2204.01873}{2204.01873}.
+\end{itemize}
+
+\section*{Teaching Experience}
+
+\entry
+  {Project Management}
+  {2025, 2026}
+  {Teaching Assistant, University of Michigan}
+  {Ann Arbor, MI}
+% Optional: add a bullet on what you did, e.g. leading sections, grading
+% team projects, or advising student teams -- only what is accurate.
+
+\vspace{0.3em}
+\entry
+  {Linear Programming (Graduate Level)}
+  {2026}
+  {Teaching Assistant, University of Michigan}
+  {Ann Arbor, MI}
+
+\vspace{0.3em}
+\entry
+  {Advanced Linear Algebra Tools and Applications}
+  {01/2022 -- 03/2022}
+  {Undergraduate Teaching Assistant, University of Washington}
+  {Seattle, WA}
+
+\section*{Selected Projects}
+
+\begin{itemize}
+  \item Backend for an airline flight search and ticketing application (Java, SQL).
+  \item Microtargeting system for political advertisements (R, HTML).
+  \item Breaking Google CAPTCHA with machine vision (Python).
+  \item AWS Athena to BigQuery SQL conversion tool (SQL, Python, regex).
+  \item Multi-platform data profiling (Python, SQL, GCP, Excel).
+  \item Home automation with smart appliances (Python).
+\end{itemize}
+
+\section*{Skills}
+
+\begin{itemize}
+  \item \textbf{Methods:} online learning, multi-armed and combinatorial
+    semi-bandits, sequential decision-making, Bayesian modeling,
+    optimization, linear programming, Markov chains and Monte Carlo methods,
+    spectral graph theory, regression, clustering, sentiment analysis.
+  \item \textbf{Programming:} Python (pandas, scikit-learn, PySpark,
+    TensorFlow), R (dplyr, tidyverse, ggplot2), SQL (BigQuery, Athena), Java,
+    regular expressions.
+  \item \textbf{Data and cloud:} Google Cloud Platform, Amazon Web Services,
+    Apache Airflow, Apache Spark, Docker, Git, GitLab; ETL, data warehousing,
+    data lakes, database design and normalization, star-schema data
+    modeling, data governance; NoSQL (DynamoDB, Elasticsearch, Neo4j).
+  \item \textbf{Project management:} business requirements documents,
+    source-to-target mapping, scoping, release cadence, Agile development
+    (Jira, Confluence); cross-functional collaboration with engineers, data
+    scientists, analysts, and project managers.
+  \item \textbf{Tools:} Excel (pivot tables, XLOOKUP), PowerPoint.
+\end{itemize}
+
+\section*{Awards}
+
+\begin{itemize}
+  \item ``Boomtown Developer,'' American Family Insurance IT, 2023.
+  \item 1st Place, UW CSE 416 Kaggle Competition, 2020 (Python).
+  \item 1st Place, Best Data Analysis, UW Datathon, 2019 (R, Excel, PowerPoint).
+  \item 1st Place, UW CSE Bot Tournament, 2018 (Java).
+  \item Data Science Certificate, DubsTech.
+\end{itemize}
+
+% Maintenance notes (not printed):
+% - Links for the two working papers are omitted because the website currently
+%   contains placeholder href="#" values.
+% - The graph paper uses its journal publication year (2024), not the preprint
+%   year shown on the website.
+% - Expected graduation (05/2028), Ph.D. start (09/2024), and availability
+%   window are assumptions -- verify before sending.
+% - Base CV for industry applied/data/research science roles. Update the
+%   "Available" line each recruiting cycle; tailor per posting only if a
+%   posting asks for something specific.
+% - Resume vs. CV conflicts to resolve: AmFam title ("Cloud Data Engineer" on
+%   resume, "Lead Data Analyst" on old CV); UW TA dates (01-03/2022 on resume,
+%   2021 on old CV); honors thesis title (resume lists "A Markov Chain Monte
+%   Carlo Algorithm for Finding Graphical Designs").
+% - Omitted from resume: LinkedIn skill-assessment certificates, MS Teams,
+%   Majesco PAS, Guidewire (low signal for research/science roles).
+
+\end{document}
